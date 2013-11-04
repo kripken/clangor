@@ -27,6 +27,7 @@
 #if HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
+#undef HAVE_CXXABI_H // XXX EMSCRIPTEN
 #if HAVE_CXXABI_H
 #include <cxxabi.h>
 #endif

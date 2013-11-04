@@ -238,7 +238,7 @@ namespace llvm {
       /// FILE *fopen(const char *filename, const char *mode);
       fopen,
       /// FILE *fopen64(const char *filename, const char *opentype)
-      fopen64,
+      // XXX EMSCRIPTEN fopen64,
       /// int fprintf(FILE *stream, const char *format, ...);
       fprintf,
       /// int fputc(int c, FILE *stream);
@@ -262,7 +262,7 @@ namespace llvm {
       /// int fseeko(FILE *stream, off_t offset, int whence);
       fseeko,
       /// int fseeko64(FILE *stream, off64_t offset, int whence)
-      fseeko64,
+      // XXX EMSCRIPTEN fseeko64,
       /// int fsetpos(FILE *stream, const fpos_t *pos);
       fsetpos,
       /// int fstat(int fildes, struct stat *buf);
@@ -278,7 +278,7 @@ namespace llvm {
       /// off_t ftello(FILE *stream);
       ftello,
       /// off64_t ftello64(FILE *stream)
-      ftello64,
+      // XXX EMSCRIPTEN ftello64,
       /// int ftrylockfile(FILE *file);
       ftrylockfile,
       /// void funlockfile(FILE *file);
@@ -583,7 +583,7 @@ namespace llvm {
       /// FILE *tmpfile(void);
       tmpfile,
       /// FILE *tmpfile64(void)
-      tmpfile64,
+      // XXX EMSCRIPTEN tmpfile64,
       /// int toascii(int c);
       toascii,
       /// double trunc(double x);
