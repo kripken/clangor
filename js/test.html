@@ -1,5 +1,5 @@
 <body>
-<textarea id="output" rows="35"></textarea>
+<textarea id="output" cols="100" rows="35"></textarea>
 <script>
 var Module = {
   print: (function() {
@@ -20,13 +20,19 @@ var Module = {
     Module.print(x);
   },
 
-  arguments: ['-v', 'input.cpp', '-c', '-S'],
+  arguments: '-cc1 -triple i386-pc-linux-gnu -S -disable-free -disable-llvm-verifier -main-file-name input.cpp -mrelocation-model static -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -target-cpu pentium4 -target-linker-version 2.22 -momit-leaf-frame-pointer -coverage-file /tmp/input.s -resource-dir /home/alon/Dev/clang+llvm-3.2-x86-linux-ubuntu-12.04/bin/../lib/clang/3.2 -fdebug-compilation-dir /tmp -ferror-limit 19 -fmessage-length 205 -mstackrealign -fobjc-runtime=gcc -fdiagnostics-show-option -fcolor-diagnostics -o input.s -x cpp-output input.cpp'.split(' '),
+
+    //[
+    //  '-ccc-echo',
+    //  '-ccc-print-phases',
+    //  '-c', '-x', 'cpp-output', 'input.cpp'
+    //],
 
   preRun: function() {
-    FS.createDataFile('/', 'input.cpp', intArrayFromString('#include <stdio.h>\nint main() { printf("hi!\n"); return 0; }'));
+    FS.createDataFile('/', 'input.cpp', intArrayFromString('void puts(const char *); int main() { puts("hi!"); return 0; }'), true, true);
   },
   postRun: function() {
-    Module.print('Data: ' + intArrayToString(FS.analyzePath('input.s').object.contents));"
+    Module.print('Data: ' + intArrayToString(FS.analyzePath('input.s').object.contents));
   },
 };
 </script>
