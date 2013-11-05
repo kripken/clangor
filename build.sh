@@ -20,5 +20,7 @@ chmod +x Release/bin/clang-tblgen
 cat tools/clang/utils/TableGen/Makefile | grep -v clang-tblgen > tools/clang/utils/TableGen/Makefile # XXX untested
 
 cp Release/bin/clang clang.bc
-EMCC_DEBUG=1 ~/Dev/emscripten/emcc -O2 -g2 clang.bc
+EMCC_DEBUG=1 ~/Dev/emscripten/emcc -O2 -g2 clang.bc -s ASM_JS=2 -o clang.js
+
+# see js/test.html
 

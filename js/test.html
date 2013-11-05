@@ -1,0 +1,35 @@
+<body>
+<textarea id="output" rows="35"></textarea>
+<script>
+var Module = {
+  print: (function() {
+    var element = document.getElementById('output');
+    element.value = ''; // clear browser cache
+    return function(text) {
+      text = Array.prototype.slice.call(arguments).join(' ');
+      // These replacements are necessary if you render to raw HTML
+      //text = text.replace(/&/g, "&amp;");
+      //text = text.replace(/</g, "&lt;");
+      //text = text.replace(/>/g, "&gt;");
+      //text = text.replace('\n', '<br>', 'g');
+      element.value += text + "\n";
+      element.scrollTop = 99999; // focus on bottom
+    };
+  })(),
+  printErr: function(x) {
+    Module.print(x);
+  },
+
+  arguments: ['-v', 'input.cpp', '-c', '-S'],
+
+  preRun: function() {
+    FS.createDataFile('/', 'input.cpp', intArrayFromString('#include <stdio.h>\nint main() { printf("hi!\n"); return 0; }'));
+  },
+  postRun: function() {
+    Module.print('Data: ' + intArrayToString(FS.analyzePath('input.s').object.contents));"
+  },
+};
+</script>
+<script src="clang.js"></script>
+</body>
+
