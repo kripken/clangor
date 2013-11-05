@@ -19,3 +19,6 @@ cp ../native/Debug+Asserts/bin/clang-tblgen Release/bin
 chmod +x Release/bin/clang-tblgen
 cat tools/clang/utils/TableGen/Makefile | grep -v clang-tblgen > tools/clang/utils/TableGen/Makefile # XXX untested
 
+cp Release/bin/clang clang.bc
+EMCC_DEBUG=1 ~/Dev/emscripten/emcc -O1 clang.bc
+
