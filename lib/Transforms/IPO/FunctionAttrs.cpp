@@ -1271,6 +1271,7 @@ bool FunctionAttrs::inferPrototypeAttributes(Function &F) {
     setDoesNotCapture(F, 1);
     setDoesNotCapture(F, 2);
     break;
+/*
   case LibFunc::fopen64:
     if (FTy->getNumParams() != 2 ||
         !FTy->getReturnType()->isPointerTy() ||
@@ -1295,6 +1296,7 @@ bool FunctionAttrs::inferPrototypeAttributes(Function &F) {
     setDoesNotThrow(F);
     setDoesNotAlias(F, 0);
     break;
+*/
   case LibFunc::fstat64:
   case LibFunc::fstatvfs64:
     if (FTy->getNumParams() != 2 || !FTy->getParamType(1)->isPointerTy())
