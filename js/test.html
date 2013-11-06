@@ -31,7 +31,8 @@
         console.log('stdout: ' + text);
       },
       printErr: function(text) {
-        console.log('stderr: ' + text);
+        var outputElement = document.getElementById('stderr');
+        outputElement.innerHTML = outputElement.innerHTML + (outputElement.innerHTML ? '<br>' : '') + text;
       },
 
       arguments: '-cc1 -triple i386-pc-linux-gnu -S -disable-free -disable-llvm-verifier -main-file-name input.cpp -mrelocation-model static -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -target-cpu pentium4 -target-linker-version 2.22 -momit-leaf-frame-pointer -coverage-file /tmp/input.s -resource-dir /home/alon/Dev/clang+llvm-3.2-x86-linux-ubuntu-12.04/bin/../lib/clang/3.2 -fdebug-compilation-dir /tmp -ferror-limit 19 -fmessage-length 205 -mstackrealign -fobjc-runtime=gcc -fdiagnostics-show-option -fcolor-diagnostics -o input.s -x cpp-output input.cpp'.split(' '),
@@ -79,7 +80,8 @@
       </div>
 
       <div class="row">
-        <div class="span7" border=1>
+        <div class="span4" border=1>
+          <h4>input</h4>
           <textarea id="mytext">
 extern void puts(const char *str);
 
@@ -89,11 +91,12 @@ int main() {
 }
 
 </textarea>
+          <h4>console</h4>
+          <pre id="stderr"></pre>
         </div>
-        <div class="span5">
+        <div class="span8">
           <h4>output</h4>
-          <textarea id="output" cols="100" rows="35"></textarea>
-          <!--pre id="output"></pre-->
+          <pre id="output"></pre>
         </div>
       </div>
 
@@ -117,10 +120,12 @@ var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('mytext'));
 // Execution
 
 function executeCode(code, clear) {
+  var theButton = document.getElementById('the_button');
+  theButton.style = 'visibility: hidden';
   try {
     FS.unlink('input.cpp');
   } catch(e) {}
-  FS.createDataFile('/', 'input.cpp', intArrayFromString('void puts(const char *); int main() { puts("hi!"); return 0; }'), true, true); // TODO use 'code'
+  FS.createDataFile('/', 'input.cpp', intArrayFromString(code), true, true); // TODO use 'code'
   Module.callMain(Module.arguments);
   var outputElement = document.getElementById('output');
   outputElement.innerHTML = intArrayToString(FS.root.contents['input.s'].contents);
