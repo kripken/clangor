@@ -35,7 +35,7 @@
         outputElement.innerHTML = outputElement.innerHTML + (outputElement.innerHTML ? '<br>' : '') + text;
       },
 
-      arguments: '-cc1 -triple i386-pc-linux-gnu -S -disable-free -disable-llvm-verifier -main-file-name input.cpp -mrelocation-model static -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -target-cpu pentium4 -target-linker-version 2.22 -momit-leaf-frame-pointer -coverage-file /tmp/input.s -resource-dir /home/alon/Dev/clang+llvm-3.2-x86-linux-ubuntu-12.04/bin/../lib/clang/3.2 -fdebug-compilation-dir /tmp -ferror-limit 19 -fmessage-length 205 -mstackrealign -fobjc-runtime=gcc -fdiagnostics-show-option -fcolor-diagnostics -o input.s -x cpp-output input.cpp'.split(' '),
+      arguments: '-cc1 -emit-llvm -disable-free -disable-llvm-verifier -main-file-name hello_world.c -mrelocation-model static -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -target-linker-version 2.22 -momit-leaf-frame-pointer -coverage-file /home/alon/Dev/clangor/hello_world.s -resource-dir /home/alon/Dev/clang+llvm-3.2-x86-linux-ubuntu-12.04/bin/../lib/clang/3.2 -internal-isystem /usr/local/include -internal-isystem /home/alon/Dev/clang+llvm-3.2-x86-linux-ubuntu-12.04/bin/../lib/clang/3.2/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdebug-compilation-dir /home/alon/Dev/clangor -ferror-limit 19 -fmessage-length 205 -mstackrealign -fobjc-runtime=gcc -fdiagnostics-show-option -fcolor-diagnostics -o input.s -x c input.cpp'.split(' '),
 
         //[
         //  '-ccc-echo',
@@ -107,6 +107,7 @@ int main() {
           <h3>Limitations</h3>
           <p>C preprocessor is not hooked up.</p>
           <p>If you want to also execute the code, use <a href="https://github.com/kripken/llvm.js">this LLVM IR runner</a> or one of the many CPU emulators out there in JS.</p>
+          <p>This is a quick hack, build size and perf have not been optimized yet.</p>
         </div>
       </div>
 
