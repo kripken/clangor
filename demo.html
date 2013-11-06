@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Clang in JS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- codemirror -->
+    <script src="js/codemirror.js"></script>
+    <link rel="stylesheet" href="css/codemirror.css">
+
+    <script>
+    var Module = {
+      print: function(text) {
+        console.log('stdout: ' + text);
+      },
+      printErr: function(text) {
+        var outputElement = document.getElementById('stderr');
+        outputElement.innerHTML = outputElement.innerHTML + (outputElement.innerHTML ? '<br>' : '') + text;
+      },
+
+      arguments: '-cc1 -triple i386-pc-linux-gnu -S -disable-free -disable-llvm-verifier -main-file-name input.cpp -mrelocation-model static -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -target-cpu pentium4 -target-linker-version 2.22 -momit-leaf-frame-pointer -coverage-file /tmp/input.s -resource-dir /home/alon/Dev/clang+llvm-3.2-x86-linux-ubuntu-12.04/bin/../lib/clang/3.2 -fdebug-compilation-dir /tmp -ferror-limit 19 -fmessage-length 205 -mstackrealign -fobjc-runtime=gcc -fdiagnostics-show-option -fcolor-diagnostics -o input.s -x cpp-output input.cpp'.split(' '),
+
+        //[
+        //  '-ccc-echo',
+        //  '-ccc-print-phases',
+        //  '-c', '-x', 'cpp-output', 'input.cpp'
+        //],
+
+      noInitialRun: true,
+    };
+    </script>
+    <script async src="clang.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!--a class="brand" href="lua.vm.js.html">lua.vm.js</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="lua.vm.js.html">Benchmarks+FAQ</a></li>
+              <li class="active"><a href="repl.html">REPL</a></li>
+              <li><a href="script_example.html">Script Example</a></li>
+            </ul>
+          </div--><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="hero-unit">
+        <h2>Clang in JS</h2>
+        <p>This is <a href="http://clang.llvm.org/">Clang</a> running in JS, ported by <a href="http://emscripten.org">emscripten</a>.</p>
+      </div>
+
+      <div class="row">
+        <div class="span4" border=1>
+          <h4>input</h4>
+          <textarea id="mytext">
+extern void puts(const char *str);
+
+int main() {
+  puts("hello, world!");
+  return 0;
+}
+
+</textarea>
+          <h4>console</h4>
+          <pre id="stderr"></pre>
+        </div>
+        <div class="span8">
+          <h4>output</h4>
+          <pre id="output"></pre>
+        </div>
+      </div>
+
+      <p><a href="#" class="btn btn-primary btn-large " onclick="executeCode(myCodeMirror.getValue(), true); return false" id="the_button">Execute &raquo;</a></p>
+
+      <div class="row-fluid">
+        <div class="span">
+          <h3>Limitations</h3>
+          <p>C preprocessor is not hooked up.</p>
+          <p>If you want to also execute the code, use <a href="https://github.com/kripken/llvm.js">this LLVM IR runner</a> or one of the many CPU emulators out there in JS.</p>
+        </div>
+      </div>
+
+    </div> <!-- /container -->
+
+<script>
+// CodeMirror
+var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('mytext'));
+//myCodeMirror.setSize(screen.width*0.6, screen.height*0.2);
+
+// Execution
+
+function executeCode(code, clear) {
+  var theButton = document.getElementById('the_button');
+  theButton.style = 'visibility: hidden';
+  try {
+    FS.unlink('input.cpp');
+  } catch(e) {}
+  FS.createDataFile('/', 'input.cpp', intArrayFromString(code), true, true); // TODO use 'code'
+  Module.callMain(Module.arguments);
+  var outputElement = document.getElementById('output');
+  outputElement.innerHTML = intArrayToString(FS.root.contents['input.s'].contents);
+}
+</script>
+
+    <a href="https://github.com/kripken/clangor"><img style="position: absolute; top: 35px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+  </body>
+</html>
+
